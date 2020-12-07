@@ -1,6 +1,7 @@
 """
 基于Cora的GraphSage示例
 """
+from itertools import accumulate
 import torch
 
 import numpy as np
@@ -51,7 +52,10 @@ def train():
             optimizer.zero_grad()
             loss.backward()  # 反向传播计算参数的梯度
             optimizer.step()  # 使用优化方法进行梯度更新
-            print("Epoch {:03d} Batch {:03d} Loss: {:.4f}".format(e, batch, loss.item()))
+
+            predict_y = batch_train_logits.max(1)[1]
+            accuracy = torch.eq(predict_y, batch_src_label).float().mean().item()
+            print("Epoch {:03d} Batch {:03d} Loss: {:.4f} Accuracy：{:.4f}".format(e, batch, loss.item(),accuracy))
         test()
 
 
