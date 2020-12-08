@@ -30,9 +30,9 @@ class NeighborAggregator(nn.Module):
         if self.use_bias:
             init.zeros_(self.bias)
 
-    def forward(self, neighbor_feature):
+    def forward(self, neighbor_feature): #源节点数*邻居数*特征维度
         if self.aggr_method == "mean":
-            aggr_neighbor = neighbor_feature.mean(dim=1)
+            aggr_neighbor = neighbor_feature.mean(dim=1)#对第1个维度计算（即邻居数这一维度）
         elif self.aggr_method == "sum":
             aggr_neighbor = neighbor_feature.sum(dim=1)
         elif self.aggr_method == "max":
@@ -120,7 +120,7 @@ class GraphSage(nn.Module):
             self.gcn.append(SageGCN(hidden_dim[index], hidden_dim[index+1]))
         self.gcn.append(SageGCN(hidden_dim[-2], hidden_dim[-1], activation=None))
 
-    def forward(self, node_features_list):
+    def forward(self, node_features_list): 
         hidden = node_features_list
         for l in range(self.num_layers):
             next_hidden = []
